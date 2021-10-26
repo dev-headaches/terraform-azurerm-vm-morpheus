@@ -2,23 +2,20 @@ variable "name" {
   type = string
   description = "a single word to be added to the VM name to describe the VM (ex. 'WEB01')"
 }
-variable "rgname" {
+variable "kv_name" {
   type        = string
+  description = "the name of the existing azure key vault in which to store azureuser password"
 }
-variable "kvid" {
+variable "prjnum" {
   type        = string
-  description = "the ID of the key vault in which to store azureuser password"
+  description = "the existing project number used to deploy the hub"
 }
-variable "subnetID" {
+variable "enviro" {
   type        = string
+  description = "the environment name used for the hub deployment (default is 'dev')"
+  default = "dev"
 }
-/**
-variable "vmPubIPid" {
+variable "orgname" {
   type        = string
+  description = "the organization name used for the hub deployment"
 }
-
-variable "wrkldID" {
-  type        = string
-  description = "a name/tag/id for the workload being created"
-}
-**/
