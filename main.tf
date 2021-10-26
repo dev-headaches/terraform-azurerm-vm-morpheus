@@ -42,13 +42,13 @@ resource "random_password" "vmpasswd" {
 }
 
 resource "azurerm_key_vault_secret" "vmpasswdINPUT" {
-  name         = "vmpasswd"
+  name         = format("%s%s", "vmpasswd-", local.vmname)
   value        = random_password.vmpasswd.result
   key_vault_id = data.azurerm_key_vault.vmsecretkv.id
 }
 
 data "azurerm_key_vault_secret" "vmpasswd" {
-  name         = "vmpasswd"
+  name         = format("%s%s", "vmpasswd-", local.vmname)
   key_vault_id = data.azurerm_key_vault.vmsecretkv.id
   depends_on = [
     azurerm_key_vault_secret.vmpasswdINPUT,
@@ -61,7 +61,7 @@ resource "azurerm_network_interface" "vmnic" {
   resource_group_name = local.compute_rg
 
   ip_configuration {
-    name                          = "ipconfig1"
+    name                          = format("%s%s", "ipcfg-", local.vmname)
     subnet_id                     = data.azurerm_subnet.hub_vm_subnet.id
     private_ip_address_allocation = "Dynamic"
   }
