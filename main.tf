@@ -22,6 +22,7 @@ locals {
   mgmt_rg = format("%s%s%s%s%s%s", "rg_hub", "_", "MGMT", var.orgname, var.enviro, var.prjnum)
   hub_vnet = format("%s%s%s%s%s", "vnet_", "hub", var.orgname, var.enviro, var.prjnum)
   vmname = format("%s%s", "vm-", var.name)
+  hub_azfw_name = format("%s%s%s%s", "fw_hub_", var.orgname, var.enviro, var.prjnum)
 }
 
 data "azurerm_key_vault" "vmsecretkv" {
@@ -32,6 +33,11 @@ data "azurerm_key_vault" "vmsecretkv" {
 data "azurerm_subnet" "hub_vm_subnet" {
   name = "snet_vm"
   virtual_network_name = local.hub_vnet
+  resource_group_name = local.connectivity_rg
+}
+
+data "azurerm_firewall" "hub_firewall" {
+  name = local.hub_azfw_name
   resource_group_name = local.connectivity_rg
 }
 
@@ -59,6 +65,7 @@ resource "azurerm_network_interface" "vmnic" {
   name                = format("%s%s", "nic-", local.vmname)
   location            = "usgovvirginia"
   resource_group_name = local.compute_rg
+  dns_servers         = [data.azurerm_firewall.hub_firewall.ip_configuration[0].private_ip_address]
 
   ip_configuration {
     name                          = format("%s%s", "ipcfg-", local.vmname)
