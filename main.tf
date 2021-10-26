@@ -63,7 +63,7 @@ locals {
 
 resource "azurerm_network_interface" "vmnic" {
   name                = format("%s%s", "nic-", local.vmname)
-  location            = var.location
+  location            = "usgovvirginia"
   resource_group_name = local.compute_rg
 
   ip_configuration {
