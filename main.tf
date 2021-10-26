@@ -4,16 +4,13 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 2.12"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 2.3.0"
+    }
   }
 }
 
-
-locals {
-  orgname = "morphcld"
-  enviro = "dev"
-  prjnum = "1111"
-  hubrg_prefix = "rg_hub"
-}
 
 #construct list of different things from the hub
 locals {
@@ -24,6 +21,7 @@ locals {
   netsec_rg = format("%s%s%s%s%s%s", "rg_hub", "_", "NetSec", var.orgname, var.enviro, var.prjnum)
   mgmt_rg = format("%s%s%s%s%s%s", "rg_hub", "_", "MGMT", var.orgname, var.enviro, var.prjnum)
   hub_vnet = format("%s%s%s%s%s", "vnet_", "hub", var.orgname, var.enviro, var.prjnum)
+  vmname = format("%s%s", "vm-", var.name)
 }
 
 data "azurerm_key_vault" "vmsecretkv" {
@@ -56,10 +54,6 @@ data "azurerm_key_vault_secret" "vmpasswd" {
     azurerm_key_vault_secret.vmpasswdINPUT,
   ]
 }
-
-locals {
-  vmname = format("%s%s", "vm-", var.name)
-} 
 
 resource "azurerm_network_interface" "vmnic" {
   name                = format("%s%s", "nic-", local.vmname)
