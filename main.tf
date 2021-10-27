@@ -21,7 +21,7 @@ locals {
   netsec_rg = format("%s%s%s%s%s%s", "rg_hub", "_", "NetSec", var.orgname, var.enviro, var.prjnum)
   mgmt_rg = format("%s%s%s%s%s%s", "rg_hub", "_", "MGMT", var.orgname, var.enviro, var.prjnum)
   hub_vnet = format("%s%s%s%s%s", "vnet_", "hub", var.orgname, var.enviro, var.prjnum)
-  vmname = format("vm-%s-%s-%s", "vm-", var.name, var.enviro, var.prjnum)
+  vmname = format("vm-%s-%s-%s", var.name, var.enviro, var.prjnum)
   hub_azfw_name = format("%s%s%s%s", "fw_hub_", var.orgname, var.enviro, var.prjnum)
 }
 
