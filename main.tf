@@ -25,6 +25,18 @@ locals {
   hub_azfw_name = format("%s%s%s%s", "fw_hub_", var.orgname, var.enviro, var.prjnum)
 }
 
+data "azurerm_resources" "vmpasswordkeyvault" {
+  type = "Microsoft.KeyVault/vaults"
+  resource_group_name = local.sec_rg
+  required_tags = {
+    environment = var.enviro
+    prjnum = var.prjnum
+    orgname = var.orgname
+    usecase = "vmpasswords"
+  }
+}
+
+
 data "azurerm_key_vault" "vmsecretkv" {
   name = var.kv_name
   resource_group_name = local.sec_rg
@@ -63,7 +75,7 @@ data "azurerm_key_vault_secret" "vmpasswd" {
 
 resource "azurerm_network_interface" "vmnic" {
   name                = format("%s%s", "nic-", local.vmname)
-  location            = "usgovvirginia"
+  location            = data.azurerm_firewall.hub_firewall.location
   resource_group_name = local.compute_rg
   dns_servers         = [data.azurerm_firewall.hub_firewall.ip_configuration[0].private_ip_address]
 
@@ -77,7 +89,7 @@ resource "azurerm_network_interface" "vmnic" {
 resource "azurerm_windows_virtual_machine" "vm" {
   name                            = local.vmname
   resource_group_name             = local.compute_rg
-  location                        = "usgovvirginia"
+  location                        = data.azurerm_firewall.hub_firewall.location
   size                            = "Standard_DS1_v2"
   admin_username                  = "azureuser"
   admin_password                  = data.azurerm_key_vault_secret.vmpasswd.value
