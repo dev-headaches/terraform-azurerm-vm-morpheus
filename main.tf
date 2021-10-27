@@ -36,9 +36,8 @@ data "azurerm_resources" "vmpasswordkeyvault" {
   }
 }
 
-
 data "azurerm_key_vault" "vmsecretkv" {
-  name = var.kv_name
+  name = data.azurerm_resources.vmpasswordkeyvault.resources[0].name
   resource_group_name = local.sec_rg
 }
 
