@@ -54,6 +54,9 @@ data "azurerm_firewall" "hub_firewall" {
 
 resource "random_password" "vmpasswd" {
   length           = 16
+  min_lower        = 1
+  min_upper        = 1
+  min_special      = 1
   special          = true
   override_special = "_%@"
 }
