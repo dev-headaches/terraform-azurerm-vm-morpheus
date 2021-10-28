@@ -15,6 +15,13 @@ variable "orgname" {
   type        = string
   description = "the organization name used for the hub deployment"
 }
+
+variable "vmsize" {
+  type        = string
+  description = "the vmsize sku"
+  default = "Standard_DS1_v2"
+}
+
 /*
 variable "kv_name" {
   type        = string

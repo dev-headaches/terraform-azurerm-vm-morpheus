@@ -93,7 +93,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   computer_name                   = substr(format("%s%s", var.name, var.prjnum), 0,15)
   resource_group_name             = local.compute_rg
   location                        = data.azurerm_firewall.hub_firewall.location
-  size                            = "Standard_DS1_v2"
+  size                            = var.vmsize
   admin_username                  = "azureuser"
   admin_password                  = data.azurerm_key_vault_secret.vmpasswd.value
   //disable_password_authentication = false
