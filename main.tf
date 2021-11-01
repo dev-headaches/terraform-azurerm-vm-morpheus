@@ -126,7 +126,7 @@ resource "azurerm_virtual_machine_extension" "morpheus_agent" {
 
   protected_settings = <<SETTINGS
   {
-    "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${local.base64EncodedScript }')) | Out-File -filepath morphinstall.ps1\" && powershell -ExecutionPolicy Unrestricted -File morphinstall.ps1"
+    "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.tf.rendered)}')) | Out-File -filepath morphinstall.ps1\" && powershell -ExecutionPolicy Unrestricted -File morphinstall.ps1"
   }
   SETTINGS
 
@@ -134,13 +134,16 @@ resource "azurerm_virtual_machine_extension" "morpheus_agent" {
     azurerm_windows_virtual_machine.vm
   ]
 }
-/*
+
 data "template_file" "tf" {
-    template = "${file("./morphinstall.ps1")}"
+    #template = file("./morphinstall.ps1")
+    template = "<powershell>${file("./morphinstall.ps1")}</powershell><persist>false</persist>" 
     vars = {
       morph_api_key = var.morph_api_key
       morph_url = var.morph_url
    }
-} 
-*/
+}
 
+/*
+"commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${local.base64EncodedScript }')) | Out-File -filepath morphinstall.ps1\" && powershell -ExecutionPolicy Unrestricted -File morphinstall.ps1"
+*/
