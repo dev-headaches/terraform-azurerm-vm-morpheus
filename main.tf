@@ -115,9 +115,8 @@ resource "azurerm_windows_virtual_machine" "vm" {
   }
 }
 
-resource "azurerm_virtual_machine_extension" "morheus_agent" {
+resource "azurerm_virtual_machine_extension" "morpheus_agent" {
   name                 = "install-morph-agent"
-  resource_group_name  = local.compute_rg
   virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
