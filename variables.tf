@@ -22,6 +22,17 @@ variable "vmsize" {
   default = "Standard_DS1_v2"
 }
 
+variable "morph_url" {
+  type = string
+  description = "url of the morpheus appliance"
+}
+
+variable "morph_api_key" {
+  type = string
+  description = "api key for the morpheus appliance"
+  sensitive   = true
+}
+
 /*
 variable "kv_name" {
   type        = string

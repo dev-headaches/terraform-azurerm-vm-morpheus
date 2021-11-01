@@ -114,3 +114,26 @@ resource "azurerm_windows_virtual_machine" "vm" {
     version   = "latest"
   }
 }
+
+resource "azurerm_virtual_machine_extension" "morheus_agent" {
+  name                 = "install-morph-agent"
+  resource_group_name  = local.compute_rg
+  virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+  protected_settings = <<SETTINGS
+  {
+    "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.tf.rendered)}')) | Out-File -filepath morphinstall.ps1\" && powershell -ExecutionPolicy Unrestricted -File morphinstall.ps1"
+  }
+  SETTINGS
+}
+
+data "template_file" "tf" {
+    template = "${file("morphinstall.ps1")}"
+    vars = {
+      morph_api_key = var.morph_api_key
+      morph_url = var.morph_url
+   }
+} 
