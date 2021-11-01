@@ -121,7 +121,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
     version   = "latest"
   }
 }
-
+/*
 resource "azurerm_virtual_machine_extension" "morpheus_agent" {
   name                 = "install-morph-agent"
   virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
