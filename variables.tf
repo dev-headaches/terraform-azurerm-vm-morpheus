@@ -27,7 +27,7 @@ variable "morph_url" {
   description = "url of the morpheus appliance"
 }
 
-variable "morph_api_key" {
+variable "nbmorph_api_key" {
   type = string
   description = "api key for the morpheus appliance"
   sensitive   = true

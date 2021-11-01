@@ -26,7 +26,7 @@ locals {
   #morphpowershellscriptfile= try(file("./morphinstall.ps1"), null)
   #base64EncodedScript = base64encode(local.morphpowershellscriptfile)
   morphtemplatefile = templatefile("./morphinstall.ps1", {
-    nbmorph_api_key = var.morph_api_key
+    nbmorph_api_key = var.nbmorph_api_key
     morph_url = var.morph_url
     servername = local.vmname
   })
