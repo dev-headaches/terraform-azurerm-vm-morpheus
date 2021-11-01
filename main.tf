@@ -23,11 +23,12 @@ locals {
   hub_vnet = format("%s%s%s%s%s", "vnet_", "hub", var.orgname, var.enviro, var.prjnum)
   vmname = format("vm-%s-%s-%s", var.name, var.enviro, var.prjnum)
   hub_azfw_name = format("%s%s%s%s", "fw_hub_", var.orgname, var.enviro, var.prjnum)
-  morphpowershellscriptfile= try(file("./morphinstall.ps1"), null)
-  base64EncodedScript = base64encode(local.morphpowershellscriptfile)
+  #morphpowershellscriptfile= try(file("./morphinstall.ps1"), null)
+  #base64EncodedScript = base64encode(local.morphpowershellscriptfile)
   morphtemplatefile = templatefile("./morphinstall.ps1", {
-    morph_api_key = var.morph_api_key
+    nbmorph_api_key = var.morph_api_key
     morph_url = var.morph_url
+    servername = local.vmname
   })
 }
 
