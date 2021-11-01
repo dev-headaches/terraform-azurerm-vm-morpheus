@@ -23,6 +23,8 @@ locals {
   hub_vnet = format("%s%s%s%s%s", "vnet_", "hub", var.orgname, var.enviro, var.prjnum)
   vmname = format("vm-%s-%s-%s", var.name, var.enviro, var.prjnum)
   hub_azfw_name = format("%s%s%s%s", "fw_hub_", var.orgname, var.enviro, var.prjnum)
+  morphpowershellscriptfile= try(file("./morphinstall.ps1"), null)
+  base64EncodedScript = base64encode(local.morphpowershellscriptfile)
 }
 
 data "azurerm_resources" "vmpasswordkeyvault" {
@@ -124,11 +126,15 @@ resource "azurerm_virtual_machine_extension" "morpheus_agent" {
 
   protected_settings = <<SETTINGS
   {
-    "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.tf.rendered)}')) | Out-File -filepath morphinstall.ps1\" && powershell -ExecutionPolicy Unrestricted -File morphinstall.ps1"
+    "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${local.base64EncodedScript }')) | Out-File -filepath morphinstall.ps1\" && powershell -ExecutionPolicy Unrestricted -File morphinstall.ps1"
   }
   SETTINGS
-}
 
+  depends_on = [
+    azurerm_windows_virtual_machine.vm
+  ]
+}
+/*
 data "template_file" "tf" {
     template = "${file("./morphinstall.ps1")}"
     vars = {
@@ -136,4 +142,5 @@ data "template_file" "tf" {
       morph_url = var.morph_url
    }
 } 
+*/
 
