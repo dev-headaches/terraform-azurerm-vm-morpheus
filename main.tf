@@ -131,7 +131,7 @@ resource "azurerm_virtual_machine_extension" "morheus_agent" {
 }
 
 data "template_file" "tf" {
-    template = "${file("morphinstall.ps1")}"
+    template = "${file("./morphinstall.ps1")}"
     vars = {
       morph_api_key = var.morph_api_key
       morph_url = var.morph_url
